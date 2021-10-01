@@ -119,7 +119,7 @@ namespace AugmentedMagics
             static void AddFeatures()
             {
                 AddWizardFeature("AMAbjuration", "Augmented Abjuration", "Abjurations you cast now last 24 hours and ignore spell resistance.", new AddAbjurationRule(), SpellSchool.Abjuration);
-                AddWizardFeature("AMConjuration", "Augmented Conjuration", "Conjuration spells you cast ignore spell resistance. Conjuration spells now automatically have the Extend Metamagic and have a higher DC based on your Constitution bonus.", new AddConjurationRule(), SpellSchool.Conjuration);
+                AddWizardFeature("AMConjuration", "Augmented Conjuration", "Conjuration spells you cast ignore spell resistance. Conjuration spells now automatically have the Selective Metamagic and have a higher DC based on your Constitution bonus.", new AddConjurationRule(), SpellSchool.Conjuration);
                 AddWizardFeature("AMDivination", "Augmented Divination", "Divination spells you cast ignore spell resistance. Divination spells are not consumed when cast, but still must be prepared if required.", new AddDivinationRule(), SpellSchool.Divination);
                 AddWizardFeature("AMEnchantment", "Augmented Enchantment", "Your enchantments now have a higher DC based on your Charisma bonus and ignore spell resistance.", new AddEnchantmentRule(), SpellSchool.Enchantment);
                 AddWizardFeature("AMEvocation", "Augmented Evocation", "Evocation spells you cast now deal bonus damage per impact.", new AddEvocationRule());

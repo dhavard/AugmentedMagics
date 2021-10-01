@@ -5,7 +5,7 @@ Specifically this mod adds a 3rd teir of "Spell Focus" which requires "Greater S
 
 Augmented Abjuration - Abjurations you cast now last 24 hours and ignore spell resistance.
 
-Augmented Conjuration - Conjuration spells you cast ignore spell resistance. Conjuration spells now automatically have the Extend Metamagic and have a higher DC based on your Constitution bonus.
+Augmented Conjuration - Conjuration spells you cast ignore spell resistance. Conjuration spells now are Selective and have a higher DC based on your Constitution bonus.
 
 Augmented Divination - Divination spells you cast ignore spell resistance. Divination spells are not consumed when cast, but still must be prepared if required.
 
@@ -17,7 +17,7 @@ Augmented Illusion - Your illusions now have a higher DC based on your Intellige
 
 Augmented Necromancy - Your Necromancy spells now have a higher DC based on your Strength bonus and ignore spell resistance.
 
-Augmented Transmutation - Transmutation spells you cast ignore spell resistance. Transmutation spells now automatically have the Extend Metamagic and have a higher DC.
+Augmented Transmutation - Transmutation spells you cast ignore spell resistance. Transmutation spells now automatically are Extended and have a higher DC.
 
 **How to install**
 
