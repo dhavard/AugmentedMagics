@@ -1,7 +1,7 @@
 # Augmented Magics
 Mod made to improve how successful non-damaging spells are on higher difficult.
 
-Specifically this mod adds a 3rd teir of "Spell Focus" which requires "Greater Spell Focus" as a prerequisite feat. Some of these may feel/be quite broken, and have absolutely no basis in tabletop. They are simply an attempt to alleviate the tendancy of enemies have inflated save bonuses on higher difficulties for spell schools heavily reliant on DC passes, while also addressing the relative uselessness of ever picking Spell Focus Abjuration for example.
+Specifically this mod adds a 3rd teir of "Spell Focus" which requires "Greater Spell Focus" in the appropriate school as a prerequisite feat as well as Greater Spell  Penetration. Some of these may feel/be quite broken, and have absolutely no basis in tabletop. They are simply an attempt to alleviate the tendancy of enemies have inflated save bonuses on higher difficulties for spell schools heavily reliant on DC passes, while also addressing the relative uselessness of ever picking Spell Focus Abjuration for example.
 
 Augmented Abjuration - Abjurations you cast now last 24 hours and ignore spell resistance.
 
