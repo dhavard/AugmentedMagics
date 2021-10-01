@@ -26,6 +26,9 @@ Augmented Transmutation - Transmutation spells you cast ignore spell resistance.
 3. Download the Augmented Magics mod
 4. Install the mod by dragging the zip file from step 5 into the Unity Mod Manager window under the Mods tab
 
+**Repository**
+https://github.com/dhavard/AugmentedMagics
+
 **Thanks**
 
 Vek17 and their Tabletop Tweaks mod, couldn't understand how to actually do some of this stuff I couldn't dissect and take apart how your mod worked. 
