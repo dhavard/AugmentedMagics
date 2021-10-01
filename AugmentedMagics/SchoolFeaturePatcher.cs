@@ -7,6 +7,8 @@ using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Classes.Prerequisites;
 using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.Blueprints.Classes.Spells;
+using Kingmaker.Designers.Mechanics.Recommendations;
+using Kingmaker.Designers.Mechanics.Facts;
 
 /**
  * Adopted from Scaling Cantrips by RealityMachina
@@ -45,6 +47,9 @@ namespace AugmentedMagics
                [AugmentedMagics] PPF is parameter spell Conjuration
                [AugmentedMagics] PPF feature name Spell Focus guid 16fa59cc9a72a6043b566b49184f53fe
             */
+
+            static string MYTHIC_FEAT_SELECTION = "9ee0f6745f555484299b0a1563b99d81";
+            static string MYTHIC_ABILITY_SELECTION = "ba0e5a900b775be4a99702f1ed08914d";
 
             [HarmonyPriority(Priority.LowerThanNormal)]
             static void Postfix()
@@ -140,7 +145,7 @@ namespace AugmentedMagics
                 var MagusFeat = Resources.GetBlueprint<BlueprintFeatureSelection>("66befe7b24c42dd458952e3c47c93563");
                 var SeekerFeat = Resources.GetBlueprint<BlueprintFeatureSelection>("c6b609279cc3174478624182ac1ad812");
                 var SkaldFeat = Resources.GetBlueprint<BlueprintFeatureSelection>("0a1999535b4f77b4d89f689a385e5ec9");
-                var WizardFeat = Resources.GetBlueprint<BlueprintFeatureSelection>("8e627812dc034b9db12fa396fdc9ec75");
+                var WizardFeat = Resources.GetBlueprint<BlueprintFeatureSelection>("8c3102c2ff3b69444b139a98521a4899");
 
 
                 AddtoSelection(feat, ArcaneRiderFeat);
@@ -153,7 +158,13 @@ namespace AugmentedMagics
                 AddtoSelection(feat, SeekerFeat);
                 AddtoSelection(feat, SkaldFeat);
                 AddtoSelection(feat, WizardFeat);
+            }
 
+            static void AddMythicSelection(BlueprintFeature feat)
+            {
+                var MythicFeat = Resources.GetBlueprint<BlueprintFeatureSelection>(MYTHIC_FEAT_SELECTION);
+
+                AddtoSelection(feat, MythicFeat);
             }
 
             static void AddtoSelection(BlueprintFeature feat, BlueprintFeatureSelection selection)
@@ -175,8 +186,12 @@ namespace AugmentedMagics
                     bp.SetDescription(desc);
                     bp.m_DescriptionShort = bp.m_Description;
                     bp.AddComponent(component);
+                    bp.AddComponent(Helpers.Create<RecommendationRequiresSpellbook>());
+                    bp.AddComponent(Helpers.Create<FeatureTagsComponent>(c => {
+                        c.FeatureTags = FeatureTag.Magic;
+                    }));
                 });
-                AddFeaturetoSelection(blueprint);
+                AddMythicSelection(blueprint);
                 return blueprint;
             }
 
@@ -192,8 +207,12 @@ namespace AugmentedMagics
                     bp.m_DescriptionShort = bp.m_Description;
                     bp.AddComponent(component);
                     bp.AddComponent(new AddAugmentedPenetrationRule().InitializeSchool(school));
+                    bp.AddComponent(Helpers.Create<RecommendationRequiresSpellbook>());
+                    bp.AddComponent(Helpers.Create<FeatureTagsComponent>(c => {
+                        c.FeatureTags = FeatureTag.Magic;
+                    }));
                 });
-                AddFeaturetoSelection(blueprint);
+                AddMythicSelection(blueprint);
                 return blueprint;
             }
         }
