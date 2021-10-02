@@ -1,7 +1,13 @@
 # Augmented Magics
-Mod made to improve how successful non-damaging spells are on higher difficult.
+Mod made to improve how successful non-damaging spells are on higher difficulty.
 
-Specifically this mod adds a 3rd teir of "Spell Focus" which requires "Greater Spell Focus" in the appropriate school as a prerequisite feat as well as Greater Spell  Penetration. Some of these may feel/be quite broken, and have absolutely no basis in tabletop. They are simply an attempt to alleviate the tendancy of enemies have inflated save bonuses on higher difficulties for spell schools heavily reliant on DC passes, while also addressing the relative uselessness of ever picking Spell Focus Abjuration for example.
+Specifically this mod adds a 3rd teir of "Spell Focus" which is a Mythic Feat. It requires "Greater Spell Focus" in the appropriate school as a prerequisite feat as well as Greater Spell Penetration. Some of these may feel/be quite broken, and have absolutely no basis in tabletop. They are simply an attempt to alleviate the tendancy of enemies have inflated save bonuses on higher difficulties for spell schools heavily reliant on DC passes, while also addressing the relative uselessness of ever picking Spell Focus Abjuration for example.
+
+**Changes to existing feats**
+
+In addition to this, the existing Spell Focus, Greater Spell Focus, Spell Penetration, and Greater Spell Penetration have been doubled in effectiveness. Mythic Spell Focus is unchanged, but because it actually functions (despite what its text says) by doubling the value of the normal Spell Focus feats a change is not necessary.
+
+**New (Mythic) feats added**
 
 Augmented Abjuration - Abjurations you cast now last 24 hours and ignore spell resistance.
 
@@ -18,6 +24,8 @@ Augmented Illusion - Your illusions now have a higher DC based on your Intellige
 Augmented Necromancy - Your Necromancy spells now have a higher DC based on your Strength bonus and ignore spell resistance.
 
 Augmented Transmutation - Transmutation spells you cast ignore spell resistance. Transmutation spells now automatically are Extended and have a higher DC.
+
+Any Augment that increases a DC by a stat bonus has a minimum bonus value of 1. So if you have 0 or negative stat bonus, you will still improve your DC with these feats.
 
 **How to install**
 
