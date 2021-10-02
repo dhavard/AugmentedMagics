@@ -1,0 +1,163 @@
+RuleCastSpell.cs
+
+		public override void OnTrigger(RulebookEventContext context)
+		{
+			this.Context.IsForced = (this.IsCutscene || this.Initiator.Blueprint.IsCheater);
+			if (this.ForceFail)
+			{
+				this.Success = false;
+				return;
+			}
+			if (!this.Spell.CanTarget(this.SpellTarget) && !this.Context.IsForced)
+			{
+				PFLog.Default.ErrorWithReport(string.Format("Invalid target {0} for spell '{1}'", this.SpellTarget, this.Spell.Blueprint), Array.Empty<object>());
+				return;
+			}
+			int? useMagicDeviceDC = this.Spell.UseMagicDeviceDC;
+			if (useMagicDeviceDC != null && !this.Context.IsForced)
+			{
+				if (!this.Initiator.Descriptor.HasUMDSkill)
+				{
+					PFLog.Default.Error("Unit try to use magic item, but has no UMD skill", Array.Empty<object>());
+					return;
+				}
+				RuleSkillCheck ruleSkillCheck = new RuleSkillCheck(this.Spell.Caster.Unit, StatType.SkillUseMagicDevice, useMagicDeviceDC.Value);
+				BlueprintItemEquipmentUsable blueprintItemEquipmentUsable = this.Spell.SourceItemUsableBlueprint.Or(null);
+				ruleSkillCheck.UseMagicDeviceType = ((blueprintItemEquipmentUsable != null) ? new UsableItemType?(blueprintItemEquipmentUsable.Type) : null);
+				this.UseMagicDeviceCheck = GameHelper.TriggerSkillCheck(ruleSkillCheck, null, true);
+				if (this.IsUMDFailed)
+				{
+					return;
+				}
+			}
+			if (this.SpellFailureChance > 0 && !this.Context.IsForced)
+			{
+				if (this.SpellFailureChance < 100)
+				{
+					this.SpellFailureRoll = RulebookEvent.Dice.D100;
+				}
+				if (this.IsSpellFailed)
+				{
+					return;
+				}
+			}
+			if (this.Spell.IsAffectedByArcaneSpellFailure && !this.Context.IsForced)
+			{
+				this.SpellFailureChanceRule = Rulebook.Trigger<RuleCalculateArcaneSpellFailureChance>(new RuleCalculateArcaneSpellFailureChance(this.Initiator));
+				this.ArcaneSpellFailureChance = this.SpellFailureChanceRule.Result;
+				this.ArcaneSpellFailureRoll = RulebookEvent.Dice.D100;
+				if (this.IsArcaneSpellFailed)
+				{
+					return;
+				}
+			}
+			MechanicsContext context2 = this.Context;
+			AbilityShadowSpell abilityShadowSpell = this.Spell.ShadowSpellSettings.Or(null);
+			context2.ShadowFactorPercents = ((abilityShadowSpell != null) ? abilityShadowSpell.Factor.Calculate(this.Context) : 0);
+			this.Context.IsDuplicateSpellApplied |= this.IsDuplicateSpellApplied;
+			this.Success = true;
+			this.Result = this.Spell.Cast(this.Context);
+		}
+
+
+
+
+        using System;
+using System.Linq;
+using Kingmaker.Blueprints;
+using Kingmaker.Blueprints.Classes.Selection;
+using Kingmaker.Blueprints.Classes.Spells;
+using Kingmaker.Blueprints.Facts;
+using Kingmaker.Blueprints.JsonSystem;
+using Kingmaker.Enums;
+using Kingmaker.PubSubSystem;
+using Kingmaker.RuleSystem.Rules.Abilities;
+using Kingmaker.UnitLogic;
+using Kingmaker.UnitLogic.Abilities.Blueprints;
+using Kingmaker.UnitLogic.Parts;
+using Kingmaker.Utility;
+using UnityEngine;
+
+namespace Kingmaker.Designers.Mechanics.Facts
+{
+	// Token: 0x02001DDB RID: 7643
+	[AllowedOn(typeof(BlueprintParametrizedFeature), false)]
+	[TypeId("25067f7f5f084c04e9f977cb99eaed07")]
+	public class SpellFocusParametrized : UnitFactComponentDelegate, IInitiatorRulebookHandler<RuleCalculateAbilityParams>, IRulebookHandler<RuleCalculateAbilityParams>, ISubscriber, IInitiatorRulebookSubscriber
+	{
+		// Token: 0x17002031 RID: 8241
+		// (get) Token: 0x0600C0D5 RID: 49365 RVA: 0x00301F68 File Offset: 0x00300168
+		public BlueprintUnitFact MythicFocus
+		{
+			get
+			{
+				BlueprintUnitFactReference mythicFocus = this.m_MythicFocus;
+				if (mythicFocus == null)
+				{
+					return null;
+				}
+				return mythicFocus.Get();
+			}
+		}
+
+		// Token: 0x0600C0D6 RID: 49366 RVA: 0x00301F7C File Offset: 0x0030017C
+		public void OnEventAboutToTrigger(RuleCalculateAbilityParams evt)
+		{
+			SpellFocusParametrized.<>c__DisplayClass6_0 CS$<>8__locals1 = new SpellFocusParametrized.<>c__DisplayClass6_0();
+			CS$<>8__locals1.<>4__this = this;
+			if (this.SpellsOnly && evt.Spellbook == null)
+			{
+				return;
+			}
+			SpellFocusParametrized.<>c__DisplayClass6_0 CS$<>8__locals2 = CS$<>8__locals1;
+			BlueprintAbility spell = evt.Spell;
+			SpellSchool? spellSchool;
+			if (spell == null)
+			{
+				spellSchool = null;
+			}
+			else
+			{
+				SpellComponent component = spell.GetComponent<SpellComponent>();
+				spellSchool = ((component != null) ? new SpellSchool?(component.School) : null);
+			}
+			CS$<>8__locals2.school = (spellSchool ?? SpellSchool.None);
+			bool flag = CS$<>8__locals1.school == base.Param;
+			bool flag2;
+			if (!base.Owner.Progression.Features.Enumerable.Any((Feature p) => p.Blueprint == CS$<>8__locals1.<>4__this.Fact.Blueprint && p.Param == CS$<>8__locals1.school))
+			{
+				UnitPartExpandedArsenal unitPartExpandedArsenal = base.Owner.Get<UnitPartExpandedArsenal>();
+				flag2 = (unitPartExpandedArsenal != null && unitPartExpandedArsenal.HasSpellSchoolEntry(CS$<>8__locals1.school));
+			}
+			else
+			{
+				flag2 = false;
+			}
+			bool flag3 = flag2;
+			int num = evt.Initiator.Progression.Features.Enumerable.Any((Feature p) => p.Param == CS$<>8__locals1.<>4__this.Param && p.Blueprint == CS$<>8__locals1.<>4__this.MythicFocus) ? 2 : 1;
+			if (flag || flag3)
+			{
+				evt.AddBonusDC(this.BonusDC * num, this.Descriptor);
+			}
+		}
+
+		// Token: 0x0600C0D7 RID: 49367 RVA: 0x00003B1E File Offset: 0x00001D1E
+		public void OnEventDidTrigger(RuleCalculateAbilityParams evt)
+		{
+		}
+
+		// Token: 0x04007DC4 RID: 32196
+		public int BonusDC = 1;
+
+		// Token: 0x04007DC5 RID: 32197
+		public ModifierDescriptor Descriptor = ModifierDescriptor.UntypedStackable;
+
+		// Token: 0x04007DC6 RID: 32198
+		[SerializeField]
+		private BlueprintUnitFactReference m_MythicFocus;
+
+		// Token: 0x04007DC7 RID: 32199
+		[InfoBox("Turn on to increase DC only for spells from spellbook")]
+		public bool SpellsOnly;
+	}
+}

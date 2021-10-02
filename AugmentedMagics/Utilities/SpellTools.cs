@@ -8,6 +8,7 @@ using Kingmaker.RuleSystem;
 using Kingmaker.EntitySystem.Stats;
 using Kingmaker.EntitySystem.Entities;
 using Kingmaker.UnitLogic;
+using Kingmaker.UnitLogic.Abilities.Components;
 
 /***
  * NOT actually taken from https://github.com/Vek17/WrathMods-TabletopTweaks/tree/master/TabletopTweaks/Utilities, but it was useful for learning.
@@ -23,29 +24,51 @@ namespace AugmentedMagics.Utilities {
             }
         }
 
+        public static bool IsShadowSpellEvent(RuleCalculateAbilityParams evt)
+        {
+            return IsShadowSpellEventAbility(evt) || GetShadowSpellEventComponent(evt) != null;
+        }
+
+        public static bool IsShadowSpellEventAbility(RuleCalculateAbilityParams evt)
+        {
+            return (evt.AbilityData != null && evt.AbilityData.ShadowSpellSettings != null);
+        }
+
+        public static AbilityShadowSpell GetShadowSpellEventComponent(RuleCalculateAbilityParams evt)
+        {
+            return (AbilityShadowSpell)evt.Spell.ComponentsArray.First(x => x is AbilityShadowSpell);
+        }
+
+        public static bool IsShadowSpellEvent(RuleCastSpell evt)
+        {
+            return IsShadowSpellEventAbility(evt) || GetShadowSpellEventComponent(evt) != null;
+        }
+
+        public static bool IsShadowSpellEventAbility(RuleCastSpell evt)
+        {
+            return (evt.Spell != null && evt.Spell.ShadowSpellSettings != null);
+        }
+
+        public static AbilityShadowSpell GetShadowSpellEventComponent(RuleCastSpell evt)
+        {
+            return (AbilityShadowSpell)evt.Spell.Blueprint.ComponentsArray.First(x => x is AbilityShadowSpell);
+        }
+
         public static bool ValidateEventSpellSchool(RuleCalculateAbilityParams evt, SpellSchool school)
         {
-            /*
-            if (evt.Spell == null) 
-            {
-                Main.Log("School " + school + " spell is null");
-            }
-            else
-            {
-                if (!evt.Spell.IsSpell)
-                {
-
-                    Main.Log("School " + school + " spell is not spell");
-                }
-                if(!evt.Spell.School.Equals(school))
-                {
-
-                    Main.Log("School " + school + " context School is " + evt.Spell.School);
-                }
-            }
-            */
-
             if (evt.Spell == null || !evt.Spell.IsSpell || !evt.Spell.School.Equals(school))
+            {
+                //Main.Log("Tools return false;");
+                return false;
+            }
+
+            //Main.Log("Tools return true;");
+            return true;
+        }
+
+        public static bool ValidateEventSpellSchool(RuleCastSpell evt, SpellSchool school)
+        {
+            if (evt.Spell == null || !evt.Spell.Blueprint.IsSpell || !evt.Spell.Blueprint.School.Equals(school))
             {
                 //Main.Log("Tools return false;");
                 return false;
@@ -58,22 +81,6 @@ namespace AugmentedMagics.Utilities {
         public static bool ValidateEventSpellSchool(RulebookTargetEvent evt, SpellSchool school)
         {
             MechanicsContext context = evt.Reason.Context;
-
-            /*
-            if ((context?.SourceAbility) == null)
-            {
-                Main.Log("School " + school + " context SourceAbility is null");
-            }
-            else if (!context.SourceAbility.IsSpell)
-            {
-                Main.Log("School " + school + " context SourceAbility is not a spell");
-            }
-            if (!context.SpellSchool.Equals(school))
-            {
-                Main.Log("School " + school + " context School is " + context.SpellSchool);
-            }
-            */
-
             if ((context?.SourceAbility) == null || !context.SourceAbility.IsSpell || !context.SpellSchool.Equals(school))
             {
 

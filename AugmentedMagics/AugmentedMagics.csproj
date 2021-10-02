@@ -126,6 +126,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddShadowRule.cs" />
     <Compile Include="AddPenetrationRule.cs" />
     <Compile Include="AddAdvancedPenetrationRule.cs" />
     <Compile Include="AddDivinationRule.cs" />

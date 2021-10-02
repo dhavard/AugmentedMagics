@@ -23,6 +23,9 @@ namespace AugmentedMagics
         {
             static bool Initialized;
 
+            //UnitPartExpandedArsenal
+
+
             static string SPELL_FOCUS = "16fa59cc9a72a6043b566b49184f53fe"; //BlueprintParameterizedFeature   //FeatureGroup      //NestedFeatureSelectionUtils
             static string SPELL_FOCUS_GREATER = "5b04b45b228461c43bad768eb0f7c7bf"; //BPF
             static string SPELL_FOCUS_MYTHIC = "41fa2470ab50ff441b4cfbb2fc725109"; //BPF
@@ -184,9 +187,15 @@ namespace AugmentedMagics
                 AddWizardFeature("AMDivination", "Augmented Divination", "Divination spells you cast ignore spell resistance. Divination spells are not consumed when cast, but still must be prepared if required.", new AddDivinationRule(), SpellSchool.Divination);
                 AddWizardFeature("AMEnchantment", "Augmented Enchantment", "Your enchantments now have a higher DC based on your Charisma bonus and ignore spell resistance.", new AddEnchantmentRule(), SpellSchool.Enchantment);
                 AddWizardFeature("AMEvocation", "Augmented Evocation", "Evocation spells you cast now deal bonus damage equal to your caster stat bonus. For spells with multiple missles per cast, each subsequent missile recieves 1 less bonus damage than the previous missile.", new AddEvocationRule());
-                AddWizardFeature("AMIllusion", "Augmented Illusion", "Your illusions now have a higher DC based on your Intelligence bonus and ignore spell resistance.", new AddIllusionRule(), SpellSchool.Illusion);
+                BlueprintFeature illfeat = AddWizardFeature("AMIllusion", "Augmented Illusion", "Your illusions now have a higher DC based on your Intelligence bonus and ignore spell resistance.", new AddIllusionRule(), SpellSchool.Illusion);
                 AddWizardFeature("AMNecromancy", "Augmented Necromancy", "Your Necromancy spells now have a higher DC based on your Strength bonus and ignore spell resistance.", new AddNecromancyRule(), SpellSchool.Necromancy);
                 AddWizardFeature("AMTransmutation", "Augmented Transmutation", "Transmutation spells you cast ignore spell resistance. Transmutation spells now automatically have the Extend Metamagic and have a higher DC.", new AddTransmutationRule(), SpellSchool.Transmutation);
+
+                illfeat.AddComponent(new AddShadowRule());
+                //ShadowSpellLogicExtension
+                //ShadowDisbelieveData
+                //RuleRollChance evt2 = new RuleRollChance(target, this.ShadowFactorPercents, RollChanceType.AffectedByShadow)
+
             }
 
             static void AddFeaturetoSelection(BlueprintFeature feat)
