@@ -3,6 +3,7 @@ using Kingmaker.PubSubSystem;
 using Kingmaker.UnitLogic;
 using AugmentedMagics.Utilities;
 using Kingmaker.RuleSystem.Rules.Damage;
+using System;
 
 namespace AugmentedMagics
 {    public class AddEvocationRule : UnitFactComponentDelegate, IInitiatorRulebookHandler<RuleCalculateDamage>, IRulebookHandler<RuleCalculateDamage>, ISubscriber, IInitiatorRulebookSubscriber
@@ -16,7 +17,7 @@ namespace AugmentedMagics
                 return;
             }
 
-            int maxBonus = SpellTools.GetHighestCasterStat(evt.Initiator);
+            int maxBonus = Math.Max(1,SpellTools.GetHighestCasterStat(evt.Initiator));
             int bonus = maxBonus;
             foreach (BaseDamage baseDamage in evt.DamageBundle)
             {

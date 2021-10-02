@@ -4,6 +4,7 @@ using Kingmaker.RuleSystem.Rules.Abilities;
 using Kingmaker.UnitLogic;
 using AugmentedMagics.Utilities;
 using Kingmaker.UnitLogic.Abilities;
+using System;
 
 namespace AugmentedMagics
 {    public class AddIllusionRule : UnitFactComponentDelegate, IInitiatorRulebookHandler<RuleCalculateAbilityParams>, IRulebookHandler<RuleCalculateAbilityParams>, ISubscriber, IInitiatorRulebookSubscriber
@@ -16,7 +17,7 @@ namespace AugmentedMagics
                 //Main.Log("AddIllusionRule Failed");
                 return;
             }
-            evt.AddBonusDC(evt.Initiator.Stats.Intelligence.Bonus + 5, Kingmaker.Enums.ModifierDescriptor.Feat);
+            evt.AddBonusDC(Math.Max(1,evt.Initiator.Stats.Intelligence.Bonus + 3), Kingmaker.Enums.ModifierDescriptor.Feat);
             //Main.Log("AddIllusionRule End");
         }
 

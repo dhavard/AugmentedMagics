@@ -4,6 +4,7 @@ using Kingmaker.RuleSystem.Rules.Abilities;
 using Kingmaker.UnitLogic;
 using AugmentedMagics.Utilities;
 using Kingmaker.UnitLogic.Abilities;
+using System;
 
 namespace AugmentedMagics
 {    public class AddTransmutationRule : UnitFactComponentDelegate, IInitiatorRulebookHandler<RuleCalculateAbilityParams>, IRulebookHandler<RuleCalculateAbilityParams>, ISubscriber, IInitiatorRulebookSubscriber
@@ -16,7 +17,7 @@ namespace AugmentedMagics
                 //Main.Log("AddTransmutationRule Failed");
                 return;
             }
-            evt.AddBonusDC(SpellTools.GetHighestCasterStat(evt.Initiator), Kingmaker.Enums.ModifierDescriptor.Feat);
+            evt.AddBonusDC(Math.Max(1,SpellTools.GetHighestCasterStat(evt.Initiator)), Kingmaker.Enums.ModifierDescriptor.Feat);
             SpellTools.ConditionalAddMetamagic(evt, Metamagic.Extend);
             //Main.Log("AddTransmutationRule End");
         }

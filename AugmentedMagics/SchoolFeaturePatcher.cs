@@ -27,19 +27,38 @@ namespace AugmentedMagics
             static string SPELL_FOCUS_GREATER = "5b04b45b228461c43bad768eb0f7c7bf"; //BPF
             static string SPELL_FOCUS_MYTHIC = "41fa2470ab50ff441b4cfbb2fc725109"; //BPF
 
+            //SpellFocusParametrized
+            //IncreaseSpellSchoolDC
+
+            static string SPELL_FOCUS_DESC = "Choose a school of magic. Any spells you cast of that school are more difficult to resist.\n\nBenefit: Add +2 to the Difficulty Class for all saving throws against spells from the school of magic you select.\n\nSpecial: You can gain this feat multiple times. Its effects do not stack. Each time you take the feat, it applies to a new school of magic.";
+            static string SPELL_FOCUS_GR_DESC = "Choose a school of magic to which you have already applied to Spell Focus feat. Any spells you cast of that school are very hard to resist.\n\nBenefit: Add +2 to the Difficulty Class for all saving throws against spells from the school of magic you select. This bonus stacks with the bonus from Spell Focus.\n\nSpecial: You can gain this feat multiple times. Its effects do not stack. Each time you take the feat, it applies to a new school to which you have already applied the Spell Focus feat.";
+
             static string SPELL_PEN = "ee7dc126939e4d9438357fbd5980d459";
             static string SPELL_PEN_GREATER = "1978c3f91cfbbc24b9c9b0d017f4beec";
             static string SPELL_PEN_MYTHIC = "51b6b22ff184eef46a675449e837365d";
 
+            static string SPELL_PEN_DESC = "Your spells break through Spell Resistance more easily than most. \n\nYou get +4 bonus on caster level checks (1d20 + caster level) made to overcome a creatures spell resistance.";
+            static string SPELL_PEN_GR_DESC = SPELL_PEN_DESC + "\nThis bonus stacks with the one from Spell Penetration.";
+
+            //Standard spell focus facts
+            static string ABJURATION = "71a3f1c1ac77ae3488b9b3d6d2aac01a"; //PrerequisiteParametrizedFeature  //PrerequisiteFeature
+            static string CONJURATION = "d342cc595f499434687f9765f56d525c";
+            static string DIVINATION = "955e97411611d384db2cbc00d7ed5ead";
+            static string ENCHANTMENT = "c5bf645f128c39b40850cde005b8538f";
+            static string EVOCATION = "743d0106ee3076342839c6d550cdda25";
+            static string ILLUSION = "e588279a80eb7a24b813fadad4bc83b5";
+            static string NECROMANCY = "8791da25011fd1844ad61a3fea6ece54";
+            static string TRANSMUTATION = "49907a2e51b49d641aad3c9781a3a698";
+
             //Greater spell focus facts
-            static string ABJURATION = "f4c39693ebaffd244bbe4694e3c3ce0d"; //PrerequisiteParametrizedFeature  //PrerequisiteFeature
-            static string CONJURATION = "d1e78eeeb5295e048be5b2500c002233";
-            static string DIVINATION = "1deb774e8ba7ec64c83cd26c2d09f019";
-            static string ENCHANTMENT = "f2ae8d44d24996c449e69b6f5248507d";
-            static string EVOCATION = "f2970e8a73baeae469407638f7e75f50";
-            static string ILLUSION = "b6dff9186edca3141ba0ab4376d1347d";
-            static string NECROMANCY = "7f7a73444f15b8644a8cf0f2f149c6aa";
-            static string TRANSMUTATION = "74fd23356fc4c9847986d48f1a40bc7a";
+            static string ABJURATION_GR = "f4c39693ebaffd244bbe4694e3c3ce0d"; //PrerequisiteParametrizedFeature  //PrerequisiteFeature
+            static string CONJURATION_GR = "d1e78eeeb5295e048be5b2500c002233";
+            static string DIVINATION_GR = "1deb774e8ba7ec64c83cd26c2d09f019";
+            static string ENCHANTMENT_GR = "f2ae8d44d24996c449e69b6f5248507d";
+            static string EVOCATION_GR = "f2970e8a73baeae469407638f7e75f50";
+            static string ILLUSION_GR = "b6dff9186edca3141ba0ab4376d1347d";
+            static string NECROMANCY_GR = "7f7a73444f15b8644a8cf0f2f149c6aa";
+            static string TRANSMUTATION_GR = "74fd23356fc4c9847986d48f1a40bc7a";
 
             //augment summoning
             static string AUG_SUMMON = "38155ca9e4055bb48a89240a2055dcc3";
@@ -99,6 +118,43 @@ namespace AugmentedMagics
                 AddParentPrerequisite("AMIllusion", SPELL_PEN_GREATER);
                 AddParentPrerequisite("AMNecromancy", SPELL_PEN_GREATER);
                 AddParentPrerequisite("AMTransmutation", SPELL_PEN_GREATER);
+
+                DoubleSpellPenetration(SPELL_PEN, SPELL_PEN_DESC);
+                DoubleSpellPenetration(SPELL_PEN_GREATER, SPELL_PEN_GR_DESC);
+                DoubleSpellPenetration(SPELL_PEN_MYTHIC, null);
+
+                DoubleSpellDifficultyCheck(SPELL_FOCUS, SPELL_FOCUS_DESC);
+                DoubleSpellDifficultyCheck(SPELL_FOCUS_GREATER, SPELL_FOCUS_GR_DESC);
+            }
+
+            private static void DoubleSpellPenetration(string penfeat, string desc)
+            {
+                BlueprintFeature bp = Resources.GetBlueprint<BlueprintFeature>(penfeat);
+
+                if (desc != null)
+                {
+                    bp.SetDescription(desc);
+                }
+
+                Main.Log("Increasing Spell Penetration");
+                bp.AddComponent(new AddPenetrationRule());
+            }
+
+            private static void DoubleSpellDifficultyCheck(string focusfeat, string desc)
+            {
+                BlueprintFeature bp = Resources.GetBlueprint<BlueprintFeature>(focusfeat);
+
+                if (desc != null)
+                {
+                    bp.SetDescription(desc);
+                }
+                foreach(BlueprintComponent bc in bp.GetComponents<BlueprintComponent>())
+                {
+                    if(bc is SpellFocusParametrized)
+                    {
+                        ((SpellFocusParametrized)bc).BonusDC += 1;
+                    }
+                }
             }
 
             private static void AddParentPrerequisite(string name, string parent)
@@ -160,7 +216,7 @@ namespace AugmentedMagics
                 AddtoSelection(feat, WizardFeat);
             }
 
-            static void AddMythicSelection(BlueprintFeature feat)
+            static void AddToMythicFeatSelection(BlueprintFeature feat)
             {
                 var MythicFeat = Resources.GetBlueprint<BlueprintFeatureSelection>(MYTHIC_FEAT_SELECTION);
 
@@ -191,7 +247,7 @@ namespace AugmentedMagics
                         c.FeatureTags = FeatureTag.Magic;
                     }));
                 });
-                AddMythicSelection(blueprint);
+                AddToMythicFeatSelection(blueprint);
                 return blueprint;
             }
 
@@ -212,7 +268,7 @@ namespace AugmentedMagics
                         c.FeatureTags = FeatureTag.Magic;
                     }));
                 });
-                AddMythicSelection(blueprint);
+                AddToMythicFeatSelection(blueprint);
                 return blueprint;
             }
         }

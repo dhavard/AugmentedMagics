@@ -4,6 +4,7 @@ using Kingmaker.RuleSystem.Rules.Abilities;
 using Kingmaker.UnitLogic;
 using AugmentedMagics.Utilities;
 using Kingmaker.UnitLogic.Abilities;
+using System;
 
 namespace AugmentedMagics
 {    public class AddEnchantmentRule : UnitFactComponentDelegate, IInitiatorRulebookHandler<RuleCalculateAbilityParams>, IRulebookHandler<RuleCalculateAbilityParams>, ISubscriber, IInitiatorRulebookSubscriber
@@ -16,7 +17,7 @@ namespace AugmentedMagics
                 //Main.Log("AddEnchantmentRule Failed");
                 return;
             }
-            evt.AddBonusDC(evt.Initiator.Stats.Charisma.Bonus + 5, Kingmaker.Enums.ModifierDescriptor.Feat);
+            evt.AddBonusDC(Math.Max(1,evt.Initiator.Stats.Charisma.Bonus + 3), Kingmaker.Enums.ModifierDescriptor.Feat);
             //Main.Log("AddEnchantmentRule End");
         }
 

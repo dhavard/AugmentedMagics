@@ -126,6 +126,8 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddDifficultyCheckRule.cs" />
+    <Compile Include="AddPenetrationRule.cs" />
     <Compile Include="AddAdvancedPenetrationRule.cs" />
     <Compile Include="AddDivinationRule.cs" />
     <Compile Include="AddEnchantmentRule.cs" />
@@ -163,4 +165,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Aze.Publicise.MSBuild.Task.1.0.0\build\Aze.Publicise.MSBuild.Task.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Aze.Publicise.MSBuild.Task.1.0.0\build\Aze.Publicise.MSBuild.Task.props'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>(robocopy "$(TargetDir) " "%WrathPath%\Mods\AugmentedMagics\ " /s /e )^&amp; IF %25ERRORLEVEL%25 LEQ 1 exit 0</PostBuildEvent>
+  </PropertyGroup>
 </Project>

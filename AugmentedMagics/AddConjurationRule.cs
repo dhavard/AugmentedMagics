@@ -5,6 +5,7 @@ using Kingmaker.UnitLogic;
 using AugmentedMagics.Utilities;
 using Kingmaker.UnitLogic.Abilities;
 using Kingmaker.UnitLogic.Mechanics;
+using System;
 
 namespace AugmentedMagics
 {    public class AddConjurationRule : UnitFactComponentDelegate, IInitiatorRulebookHandler<RuleCalculateAbilityParams>, IRulebookHandler<RuleCalculateAbilityParams>, ISubscriber, IInitiatorRulebookSubscriber
@@ -18,7 +19,7 @@ namespace AugmentedMagics
                 return;
             }
             //Main.Log("AddConjurationRule Passed");
-            evt.AddBonusDC(evt.Initiator.Stats.Constitution.Bonus + 3, Kingmaker.Enums.ModifierDescriptor.Feat);
+            evt.AddBonusDC(Math.Max(1, evt.Initiator.Stats.Constitution.Bonus + 1), Kingmaker.Enums.ModifierDescriptor.Feat);
             SpellTools.ConditionalAddMetamagic(evt, Metamagic.Selective);
             //Main.Log("AddConjurationRule End");
         }

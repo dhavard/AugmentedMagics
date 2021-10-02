@@ -3,6 +3,7 @@ using Kingmaker.PubSubSystem;
 using Kingmaker.RuleSystem.Rules.Abilities;
 using Kingmaker.UnitLogic;
 using AugmentedMagics.Utilities;
+using System;
 
 namespace AugmentedMagics
 {    public class AddNecromancyRule : UnitFactComponentDelegate, IInitiatorRulebookHandler<RuleCalculateAbilityParams>, IRulebookHandler<RuleCalculateAbilityParams>, ISubscriber, IInitiatorRulebookSubscriber
@@ -15,7 +16,7 @@ namespace AugmentedMagics
                 //Main.Log("AddNecromancyRule Failed");
                 return;
             }
-            evt.AddBonusDC(evt.Initiator.Stats.Strength.Bonus + 5, Kingmaker.Enums.ModifierDescriptor.Feat);
+            evt.AddBonusDC(Math.Max(1, evt.Initiator.Stats.Strength.Bonus + 3), Kingmaker.Enums.ModifierDescriptor.Feat);
             //Main.Log("AddNecromancyRule End");
         }
 
