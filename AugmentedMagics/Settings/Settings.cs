@@ -1,7 +1,4 @@
-﻿using Kingmaker.Blueprints.Classes.Spells;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System;
 using UnityModManagerNet;
 
 namespace AugmentedMagics.Settings
@@ -16,22 +13,41 @@ namespace AugmentedMagics.Settings
         Default = DC | Penetration
     }
 
+    [Flags]
+    public enum MetamagicSetting
+    {
+        Bolster = 1 << 0,
+        Empower = 1 << 1,
+        Extend = 1 << 2,
+        Maximize = 1 << 3,
+        Persistent = 1 << 4,
+        Quicken = 1 << 5,
+        Reach = 1 << 6,
+        Selective = 1 << 7,
+
+        Default = 0 //nothing
+    }
+
+    public class SchoolSettingsData
+    {
+        public AugmentedSchoolSetting School = AugmentedSchoolSetting.Default;
+        public MetamagicSetting Metamagic = MetamagicSetting.Default;
+    }
 
     public class SettingsData : UnityModManager.ModSettings
     {
-
         public bool StrongerSpellFocus = true;
         public bool StrongerSpellPenetration = true;
         public bool AugmentedMagicSchoolFeats = true;
 
-        public AugmentedSchoolSetting AbjurationSettings = AugmentedSchoolSetting.Default;
-        public AugmentedSchoolSetting ConjurationSettings = AugmentedSchoolSetting.Default;
-        public AugmentedSchoolSetting DivinationSettings = AugmentedSchoolSetting.Default;
-        public AugmentedSchoolSetting EnchantmentSettings = AugmentedSchoolSetting.Default;
-        public AugmentedSchoolSetting EvocationSettings = AugmentedSchoolSetting.Default;
-        public AugmentedSchoolSetting IllusionSettings = AugmentedSchoolSetting.Default;
-        public AugmentedSchoolSetting NecromancySettings = AugmentedSchoolSetting.Default;
-        public AugmentedSchoolSetting TransmutationSettings = AugmentedSchoolSetting.Default;
+        public SchoolSettingsData AbjurationSettings = new SchoolSettingsData();
+        public SchoolSettingsData ConjurationSettings = new SchoolSettingsData();
+        public SchoolSettingsData DivinationSettings = new SchoolSettingsData();
+        public SchoolSettingsData EnchantmentSettings = new SchoolSettingsData();
+        public SchoolSettingsData EvocationSettings = new SchoolSettingsData();
+        public SchoolSettingsData IllusionSettings = new SchoolSettingsData();
+        public SchoolSettingsData NecromancySettings = new SchoolSettingsData();
+        public SchoolSettingsData TransmutationSettings = new SchoolSettingsData();
 
         public override void Save(UnityModManager.ModEntry modEntry)
         {

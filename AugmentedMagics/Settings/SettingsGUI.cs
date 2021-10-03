@@ -13,12 +13,15 @@ namespace AugmentedMagics.Settings
         public static IEnumerable<AugmentedSchoolSetting> AugmentedSchoolSettingOptions
             = Enum.GetValues(typeof(AugmentedSchoolSetting)).Cast<AugmentedSchoolSetting>().Where(i => i != AugmentedSchoolSetting.Default);
 
+        public static IEnumerable<MetamagicSetting> MetamagicSettingOptions
+            = Enum.GetValues(typeof(MetamagicSetting)).Cast<MetamagicSetting>().Where(i => i != MetamagicSetting.Default);
+
         public static void Draw()
         {
             DrawFeatureToggles();
             GUILayout.Space(10);
 
-            Dictionary<SpellSchool, AugmentedSchoolSetting> AugmentationSettings = new Dictionary<SpellSchool, AugmentedSchoolSetting>();
+            Dictionary<SpellSchool, SchoolSettingsData> AugmentationSettings = new Dictionary<SpellSchool, SchoolSettingsData>();
             AugmentationSettings.Add(SpellSchool.Abjuration, Main.Settings.AbjurationSettings);
             AugmentationSettings.Add(SpellSchool.Conjuration, Main.Settings.ConjurationSettings);
             AugmentationSettings.Add(SpellSchool.Divination, Main.Settings.DivinationSettings);
@@ -28,29 +31,12 @@ namespace AugmentedMagics.Settings
             AugmentationSettings.Add(SpellSchool.Necromancy, Main.Settings.NecromancySettings);
             AugmentationSettings.Add(SpellSchool.Transmutation, Main.Settings.TransmutationSettings);
 
-            DrawAugmentedOptions(SpellSchool.Abjuration, AugmentationSettings);
-            GUILayout.Space(10);
+            foreach(SpellSchool school in AugmentationSettings.Keys)
+            {
+                DrawAugmentedOptions(school, AugmentationSettings);
+                GUILayout.Space(10);
+            }
 
-            DrawAugmentedOptions(SpellSchool.Conjuration, AugmentationSettings);
-            GUILayout.Space(10);
-
-            DrawAugmentedOptions(SpellSchool.Divination, AugmentationSettings);
-            GUILayout.Space(10);
-
-            DrawAugmentedOptions(SpellSchool.Enchantment, AugmentationSettings);
-            GUILayout.Space(10);
-
-            DrawAugmentedOptions(SpellSchool.Evocation, AugmentationSettings);
-            GUILayout.Space(10);
-
-            DrawAugmentedOptions(SpellSchool.Illusion, AugmentationSettings);
-            GUILayout.Space(10);
-
-            DrawAugmentedOptions(SpellSchool.Necromancy, AugmentationSettings);
-            GUILayout.Space(10);
-
-            DrawAugmentedOptions(SpellSchool.Transmutation, AugmentationSettings);
-            GUILayout.Space(10);
         }
 
         private static bool DrawButton(string label, bool isShown = true)
@@ -86,30 +72,60 @@ namespace AugmentedMagics.Settings
             GUILayout.EndHorizontal();
         }
 
-        private static void DrawAugmentedOptions(SpellSchool school, Dictionary<SpellSchool, AugmentedSchoolSetting> AugmentationSettings)
+        private static void DrawAugmentedOptions(SpellSchool school, Dictionary<SpellSchool, SchoolSettingsData> AugmentationSettings)
         {
+            GUILayout.BeginHorizontal();
             bool shown = DrawButton(school.ToString(), false);
             GUILayout.EndHorizontal();
 
             if (!shown) return;
+            
+            DrawAugmentedSchoolOptions(school, AugmentationSettings);
+            GUILayout.Space(10);
+            DrawAugmentedMetamagicOptions(school, AugmentationSettings);
+        }
 
+        private static void DrawAugmentedSchoolOptions(SpellSchool school, Dictionary<SpellSchool, SchoolSettingsData> AugmentationSettings)
+        {
             AugmentedSchoolSetting opts = default;
-
             foreach (AugmentedSchoolSetting flag in AugmentedSchoolSettingOptions)
             {
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(10);
 
-                if (GUILayout.Toggle(AugmentationSettings[school].HasFlag(flag), $" {flag}"))
+                if (GUILayout.Toggle(AugmentationSettings[school].School.HasFlag(flag), $" {flag}"))
                 {
                     opts |= flag;
                 }
 
                 GUILayout.EndHorizontal();
             }
+            AugmentationSettings[school].School = opts;
+            GUILayout.Space(5);
+        }
 
-            AugmentationSettings[school] = opts;
+        private static void DrawAugmentedMetamagicOptions(SpellSchool school, Dictionary<SpellSchool, SchoolSettingsData> AugmentationSettings)
+        {
+            GUILayout.BeginHorizontal();
+            bool shown = DrawButton(school.ToString() + " Metamagic", false);
+            GUILayout.EndHorizontal();
 
+            if (!shown) return;
+
+            MetamagicSetting opts = default;
+            foreach (MetamagicSetting flag in AugmentedSchoolSettingOptions)
+            {
+                GUILayout.BeginHorizontal();
+                GUILayout.Space(10);
+
+                if (GUILayout.Toggle(AugmentationSettings[school].Metamagic.HasFlag(flag), $" {flag}"))
+                {
+                    opts |= flag;
+                }
+
+                GUILayout.EndHorizontal();
+            }
+            AugmentationSettings[school].Metamagic = opts;
             GUILayout.Space(5);
         }
     }
