@@ -10,28 +10,18 @@ namespace AugmentedMagics.Settings
     {
         private static readonly Dictionary<string, bool> statedict = new Dictionary<string, bool>();
 
-        public static IEnumerable<AugmentedSchoolSetting> AugmentedSchoolSettingOptions
-            = Enum.GetValues(typeof(AugmentedSchoolSetting)).Cast<AugmentedSchoolSetting>().Where(i => i != AugmentedSchoolSetting.Default);
-
-        public static IEnumerable<MetamagicSetting> MetamagicSettingOptions
-            = Enum.GetValues(typeof(MetamagicSetting)).Cast<MetamagicSetting>().Where(i => i != MetamagicSetting.Default);
-
         public static void Draw()
         {
             DrawFeatureToggles();
+            GUILayout.Space(20);
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("These features should take effect immediately, but may require restart to have description text update.");
+            GUILayout.EndHorizontal();
             GUILayout.Space(10);
 
-            Dictionary<SpellSchool, SchoolSettingsData> AugmentationSettings = new Dictionary<SpellSchool, SchoolSettingsData>();
-            AugmentationSettings.Add(SpellSchool.Abjuration, Main.Settings.AbjurationSettings);
-            AugmentationSettings.Add(SpellSchool.Conjuration, Main.Settings.ConjurationSettings);
-            AugmentationSettings.Add(SpellSchool.Divination, Main.Settings.DivinationSettings);
-            AugmentationSettings.Add(SpellSchool.Enchantment, Main.Settings.EnchantmentSettings);
-            AugmentationSettings.Add(SpellSchool.Evocation, Main.Settings.EvocationSettings);
-            AugmentationSettings.Add(SpellSchool.Illusion, Main.Settings.IllusionSettings);
-            AugmentationSettings.Add(SpellSchool.Necromancy, Main.Settings.NecromancySettings);
-            AugmentationSettings.Add(SpellSchool.Transmutation, Main.Settings.TransmutationSettings);
-
-            foreach(SpellSchool school in AugmentationSettings.Keys)
+            Dictionary<SpellSchool, SchoolSettingsData> AugmentationSettings = SettingHelper.GetSchoolSettings();
+            foreach (SpellSchool school in AugmentationSettings.Keys)
             {
                 DrawAugmentedOptions(school, AugmentationSettings);
                 GUILayout.Space(10);
@@ -63,12 +53,22 @@ namespace AugmentedMagics.Settings
 
             if (!shown) return;
 
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("These features may require restarting the game to take effect.");
+            GUILayout.EndHorizontal();
+            GUILayout.Space(10);
+
             GUILayout.BeginHorizontal();
             Main.Settings.StrongerSpellFocus = GUILayout.Toggle(Main.Settings.StrongerSpellFocus, " Enables increasing Spell Focus, Greater, and Mythic feats DC bonus");
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
             Main.Settings.StrongerSpellPenetration = GUILayout.Toggle(Main.Settings.StrongerSpellPenetration, " Enables increasing Spell Penetration and Greater feats SR penetration");
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            Main.Settings.StrongerSpellPenetration = GUILayout.Toggle(Main.Settings.AugmentationsAreMythic, " Augmented Magic feats are mythic (turn off to conver to Wizard feats).");
             GUILayout.EndHorizontal();
         }
 
@@ -88,7 +88,7 @@ namespace AugmentedMagics.Settings
         private static void DrawAugmentedSchoolOptions(SpellSchool school, Dictionary<SpellSchool, SchoolSettingsData> AugmentationSettings)
         {
             AugmentedSchoolSetting opts = default;
-            foreach (AugmentedSchoolSetting flag in AugmentedSchoolSettingOptions)
+            foreach (AugmentedSchoolSetting flag in SettingHelper.AugmentedSchoolSettingOptions)
             {
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(10);
@@ -113,7 +113,7 @@ namespace AugmentedMagics.Settings
             if (!shown) return;
 
             MetamagicSetting opts = default;
-            foreach (MetamagicSetting flag in AugmentedSchoolSettingOptions)
+            foreach (MetamagicSetting flag in SettingHelper.MetamagicSettingOptions)
             {
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(10);

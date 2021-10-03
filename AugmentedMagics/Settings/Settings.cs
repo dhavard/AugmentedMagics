@@ -9,12 +9,14 @@ namespace AugmentedMagics.Settings
         Damage = 1 << 0,
         DC = 1 << 1,
         Penetration = 1 << 2,
+        OneDayBuffs = 1 << 3,
+        InifiniteCast = 1 << 4,
 
         Default = DC | Penetration
     }
 
     [Flags]
-    public enum MetamagicSetting
+    public enum MetamagicSetting //1,2,4,8,16,32,64,128
     {
         Bolster = 1 << 0,
         Empower = 1 << 1,
@@ -38,6 +40,7 @@ namespace AugmentedMagics.Settings
     {
         public bool StrongerSpellFocus = true;
         public bool StrongerSpellPenetration = true;
+        public bool AugmentationsAreMythic = true;
         public bool AugmentedMagicSchoolFeats = true;
 
         public SchoolSettingsData AbjurationSettings = new SchoolSettingsData();
