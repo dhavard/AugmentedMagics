@@ -131,14 +131,6 @@
     <Compile Include="AddDamageRule.cs" />
     <Compile Include="AddPenetrationRule.cs" />
     <Compile Include="AddAugmentedPenetrationRule.cs" />
-    <Compile Include="AddDivinationRule.cs" />
-    <Compile Include="AddEnchantmentRule.cs" />
-    <Compile Include="AddEvocationRule.cs" />
-    <Compile Include="AddNecromancyRule.cs" />
-    <Compile Include="AddIllusionRule.cs" />
-    <Compile Include="AddTransmutaionRule.cs" />
-    <Compile Include="AddConjurationRule.cs" />
-    <Compile Include="AddAbjurationRule.cs" />
     <Compile Include="SchoolFeaturePatcher.cs" />
     <Compile Include="Config\Blueprints.cs" />
     <Compile Include="Config\IUpdatableSettings.cs" />

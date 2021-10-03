@@ -31,7 +31,7 @@ namespace AugmentedMagics
 
             if (ssd.School.HasFlag(AugmentedSchoolSetting.DC))
             {
-                int bonus = Math.Max(1, SpellTools.GetHighestCasterStat(evt.Initiator));
+                int bonus = 1 + Math.Max(1, SpellTools.GetHighestCasterLevel(evt.Initiator) / 2);
                 evt.AddBonusDC(bonus, Kingmaker.Enums.ModifierDescriptor.Feat);
             }
 

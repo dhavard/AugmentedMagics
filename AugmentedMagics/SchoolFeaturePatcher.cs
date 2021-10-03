@@ -78,29 +78,23 @@ namespace AugmentedMagics
                 Initialized = true;
                 AddFeatures();
                 AddParentPrereqs();
+                ImproveBaseFeats();
+            }
+
+            static void ImproveBaseFeats()
+            {
+                DoubleSpellPenetration(SPELL_PEN, SPELL_PEN_DESC);
+                DoubleSpellPenetration(SPELL_PEN_GREATER, SPELL_PEN_GR_DESC);
+                DoubleSpellPenetration(SPELL_PEN_MYTHIC, null);
+
+                DoubleSpellDifficultyCheck(SPELL_FOCUS, SPELL_FOCUS_DESC);
+                DoubleSpellDifficultyCheck(SPELL_FOCUS_GREATER, SPELL_FOCUS_GR_DESC);
             }
 
             static void AddParentPrereqs()
             {
-                /*
-                BlueprintFeature augsum = Resources.GetBlueprint<BlueprintFeature>(AUG_SUMMON);
-                if( augsum != null )
-                {
-                    foreach(BlueprintComponent bf in augsum.GetComponents<BlueprintComponent>())
-                    { 
-                        if(bf is PrerequisiteParametrizedFeature)
-                        {
-                            PrerequisiteParametrizedFeature ppf = (PrerequisiteParametrizedFeature)bf;
-                            if (ppf.IsParameterSpellSchool)
-                            {
-                                Main.Log("PPF is parameter spell " + ppf.SpellSchool);
-                            }
-                            BlueprintFeature reff = ppf.Feature;
-                            Main.Log("PPF feature name " + reff.Name + " guid " + reff.AssetGuid);
-                        }
-                    }
-                }
-                */
+                if (!Main.Settings.AugmentedMagicSchoolFeats)
+                    return;
 
                 AddParentPrerequisiteParameterized("AMAbjuration", SPELL_FOCUS_GREATER, SpellSchool.Abjuration);
                 AddParentPrerequisiteParameterized("AMConjuration", SPELL_FOCUS_GREATER, SpellSchool.Conjuration);
@@ -119,13 +113,6 @@ namespace AugmentedMagics
                 AddParentPrerequisite("AMIllusion", SPELL_PEN_GREATER);
                 AddParentPrerequisite("AMNecromancy", SPELL_PEN_GREATER);
                 AddParentPrerequisite("AMTransmutation", SPELL_PEN_GREATER);
-
-                DoubleSpellPenetration(SPELL_PEN, SPELL_PEN_DESC);
-                DoubleSpellPenetration(SPELL_PEN_GREATER, SPELL_PEN_GR_DESC);
-                DoubleSpellPenetration(SPELL_PEN_MYTHIC, null);
-
-                DoubleSpellDifficultyCheck(SPELL_FOCUS, SPELL_FOCUS_DESC);
-                DoubleSpellDifficultyCheck(SPELL_FOCUS_GREATER, SPELL_FOCUS_GR_DESC);
             }
 
             private static void DoubleSpellPenetration(string penfeat, string desc)
@@ -184,6 +171,9 @@ namespace AugmentedMagics
 
             static void AddFeatures()
             {
+                if (!Main.Settings.AugmentedMagicSchoolFeats)
+                    return;
+
                 AddWizardSchoolFeature("AMAbjuration", "Augmented Abjuration", SpellSchool.Abjuration);
                 AddWizardSchoolFeature("AMConjuration", "Augmented Conjuration", SpellSchool.Conjuration);
                 AddWizardSchoolFeature("AMDivination", "Augmented Divination", SpellSchool.Divination);
@@ -281,7 +271,7 @@ namespace AugmentedMagics
                 }
                 if (ssd.School.HasFlag(AugmentedSchoolSetting.DC))
                 {
-                    desc += "\n  - Has bonus DC equal to 1 + caster level dividied by 4.";
+                    desc += "\n  - Has bonus DC equal to 1 + caster level divided by 2.";
                 }
                 if (ssd.School.HasFlag(AugmentedSchoolSetting.InifiniteCast))
                 {
