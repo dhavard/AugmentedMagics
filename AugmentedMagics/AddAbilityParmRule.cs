@@ -55,7 +55,7 @@ namespace AugmentedMagics
             {
                 if (SettingHelper.HasMetamagic(School.Value, meta))
                 {
-                    Main.Log("AddAbbilityParmRule School " + School.Value + " Metamagic " + meta);
+                    //Main.Log("AddAbbilityParmRule School " + School.Value + " Metamagic " + meta);
                     SpellTools.ConditionalAddMetamagic(evt, meta);
                 }
             }

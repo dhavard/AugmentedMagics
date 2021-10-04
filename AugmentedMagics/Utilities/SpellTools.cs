@@ -19,7 +19,7 @@ namespace AugmentedMagics.Utilities {
         {
             if (MetamagicHelper.HasMetamagic(evt.Spell.AvailableMetamagic, meta))
             {
-                Main.Log("AddAbbilityParmRule Spell " + evt.Spell.Name + " Metamagic " + meta);
+                //Main.Log("AddAbbilityParmRule Spell " + evt.Spell.Name + " Metamagic " + meta);
                 evt.AddMetamagic(meta);
             }
         }
