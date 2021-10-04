@@ -88,12 +88,36 @@ namespace AugmentedMagics.Settings
         private static void DrawAugmentedSchoolOptions(SpellSchool school, Dictionary<SpellSchool, SchoolSettingsData> AugmentationSettings)
         {
             AugmentedSchoolSetting opts = default;
-            foreach (AugmentedSchoolSetting flag in SettingHelper.AugmentedSchoolSettingOptions)
+            foreach (AugmentedSchoolSetting flag in SettingHelper.AugmentedSchoolSettingOptions.OrderBy(i => i.ToString()))
             {
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(10);
 
-                if (GUILayout.Toggle(AugmentationSettings[school].School.HasFlag(flag), $" {flag}"))
+                string label = $" {flag}";
+                if (flag == AugmentedSchoolSetting.DC)
+                {
+                    label = " DC by caster level";
+                }
+                switch(flag)
+                {
+                    case AugmentedSchoolSetting.DC:
+                        label = " DC by caster level";
+                        break;
+                    case AugmentedSchoolSetting.DCbyStats:
+                        label = " DC by caster stat bonus";
+                        break;
+                    case AugmentedSchoolSetting.InifiniteCast:
+                        label = " Infinite usage";
+                        break;
+                    case AugmentedSchoolSetting.OneDayBuffs:
+                        label = " 24 hour buffs";
+                        break;
+                    case AugmentedSchoolSetting.Penetration:
+                        label = " Ignore Spell Resistance";
+                        break;
+
+                }
+                if (GUILayout.Toggle(AugmentationSettings[school].School.HasFlag(flag), label))
                 {
                     opts |= flag;
                 }

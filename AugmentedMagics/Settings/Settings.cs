@@ -11,6 +11,7 @@ namespace AugmentedMagics.Settings
         Penetration = 1 << 2,
         OneDayBuffs = 1 << 3,
         InifiniteCast = 1 << 4,
+        DCbyStats = 1 << 5,
 
         Default = DC | Penetration
     }

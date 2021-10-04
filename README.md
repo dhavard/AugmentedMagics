@@ -38,7 +38,8 @@ Settings include:
 
 Each spell school has an Augmented feat which can be configued to any/all of the following:
 - Add bonus damage based on highest caster stat
-- Add bonus DC based on 1 + caster level / 3
+- Add bonus DC based on highest caster stat
+- Add bonus DC based on 1 + caster level / 2
 - Ignore Spell Penetration
 - Set any buff from this school to 24 hour duration
 - All spells of this school may be cast infinitely

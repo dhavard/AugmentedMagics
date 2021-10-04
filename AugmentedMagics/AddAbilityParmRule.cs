@@ -35,6 +35,12 @@ namespace AugmentedMagics
                 evt.AddBonusDC(bonus, Kingmaker.Enums.ModifierDescriptor.Feat);
             }
 
+            if (ssd.School.HasFlag(AugmentedSchoolSetting.DCbyStats))
+            {
+                int bonus = 1 + Math.Max(1, SpellTools.GetHighestCasterStat(evt.Initiator));
+                evt.AddBonusDC(bonus, Kingmaker.Enums.ModifierDescriptor.Feat);
+            }
+
             if (ssd.School.HasFlag(AugmentedSchoolSetting.InifiniteCast))
             {
                 evt.AbilityData.SaveSpellbookSlot = true;
