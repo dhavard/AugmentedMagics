@@ -127,16 +127,11 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddAbilityParmRule.cs" />
+    <Compile Include="AddBuffHandlerRule.cs" />
+    <Compile Include="AddDamageRule.cs" />
     <Compile Include="AddPenetrationRule.cs" />
-    <Compile Include="AddAdvancedPenetrationRule.cs" />
-    <Compile Include="AddDivinationRule.cs" />
-    <Compile Include="AddEnchantmentRule.cs" />
-    <Compile Include="AddEvocationRule.cs" />
-    <Compile Include="AddNecromancyRule.cs" />
-    <Compile Include="AddIllusionRule.cs" />
-    <Compile Include="AddTransmutaionRule.cs" />
-    <Compile Include="AddConjurationRule.cs" />
-    <Compile Include="AddAbjurationRule.cs" />
+    <Compile Include="AddAugmentedPenetrationRule.cs" />
     <Compile Include="SchoolFeaturePatcher.cs" />
     <Compile Include="Config\Blueprints.cs" />
     <Compile Include="Config\IUpdatableSettings.cs" />
@@ -144,6 +139,9 @@
     <Compile Include="Extensions\ExtentionMethods.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\SettingHelper.cs" />
+    <Compile Include="Settings\SettingsGUI.cs" />
+    <Compile Include="Settings\Settings.cs" />
     <Compile Include="Utilities\Resources.cs" />
     <Compile Include="Utilities\DescriptionTools.cs" />
     <Compile Include="Utilities\Helpers.cs" />
