@@ -46,7 +46,7 @@ namespace AugmentedMagics.Settings
         public static bool HasMetamagic(SpellSchool school, Metamagic meta)
         {
             SchoolSettingsData ssd = GetSchoolSettings(school);
-            return (meta == Metamagic.Bolstered && ssd.Metamagic.HasFlag(MetamagicSetting.Bolster))
+            return (meta == Metamagic.Bolstered && ssd.Metamagic.HasFlag(MetamagicSetting.Bolstered))
                 || (meta == Metamagic.Empower && ssd.Metamagic.HasFlag(MetamagicSetting.Empower))
                 || (meta == Metamagic.Extend && ssd.Metamagic.HasFlag(MetamagicSetting.Extend))
                 || (meta == Metamagic.Maximize && ssd.Metamagic.HasFlag(MetamagicSetting.Maximize))

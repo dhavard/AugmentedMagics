@@ -68,7 +68,11 @@ namespace AugmentedMagics.Settings
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
-            Main.Settings.StrongerSpellPenetration = GUILayout.Toggle(Main.Settings.AugmentationsAreMythic, " Augmented Magic feats are mythic (turn off to conver to Wizard feats).");
+            Main.Settings.AugmentedMagicSchoolFeats = GUILayout.Toggle(Main.Settings.AugmentedMagicSchoolFeats, " Augmented Magic active.");
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            Main.Settings.AugmentationsAreMythic = GUILayout.Toggle(Main.Settings.AugmentationsAreMythic, " Augmented Magic feats are mythic (turn off to conver to Wizard feats).");
             GUILayout.EndHorizontal();
         }
 

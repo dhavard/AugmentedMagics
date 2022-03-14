@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityModManagerNet;
+using Kingmaker.UnitLogic.Abilities;
 
 namespace AugmentedMagics.Settings
 {
@@ -19,14 +20,23 @@ namespace AugmentedMagics.Settings
     [Flags]
     public enum MetamagicSetting //1,2,4,8,16,32,64,128
     {
-        Bolster = 1 << 0,
+        Empower = Metamagic.Empower,
+        Maximize = Metamagic.Maximize,
+        Quicken = Metamagic.Quicken,
+        Extend = Metamagic.Extend,
+        Heighten = Metamagic.Heighten,
+        Reach = Metamagic.Reach,
+        Persistent = Metamagic.Persistent,
+        Selective = Metamagic.Selective,
+        Bolstered = Metamagic.Bolstered,
+        /*Bolstered = 1 << 0,
         Empower = 1 << 1,
         Extend = 1 << 2,
         Maximize = 1 << 3,
         Persistent = 1 << 4,
         Quicken = 1 << 5,
         Reach = 1 << 6,
-        Selective = 1 << 7,
+        Selective = 1 << 7,*/
 
         Default = 0 //nothing
     }
