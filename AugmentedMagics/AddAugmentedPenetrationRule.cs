@@ -5,6 +5,7 @@ using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Facts;
 using Kingmaker.RuleSystem.Rules;
 using AugmentedMagics.Utilities;
+using AugmentedMagics.Settings;
 
 namespace AugmentedMagics
 {
@@ -12,19 +13,7 @@ namespace AugmentedMagics
     [AllowedOn(typeof(BlueprintUnitFact), false)]
     public class AddAugmentedPenetrationRule : UnitFactComponentDelegate, IInitiatorRulebookHandler<RuleSpellResistanceCheck>, IRulebookHandler<RuleSpellResistanceCheck>, ISubscriber, IInitiatorRulebookSubscriber
     {
-        private SpellSchool? _school = null;
-        public SpellSchool? School
-        {
-            get
-            {
-                return _school;
-            }
-
-            set
-            {
-                _school = value;
-            }
-        }
+        public SpellSchool? School = null;
 
         public AddAugmentedPenetrationRule InitializeSchool(SpellSchool school)
         {
@@ -34,11 +23,17 @@ namespace AugmentedMagics
 
         public void OnEventAboutToTrigger(RuleSpellResistanceCheck evt)
         {
-            if (!_school.HasValue || !SpellTools.ValidateEventSpellSchool(evt, _school.Value))
+            if (!School.HasValue || !SpellTools.ValidateEventSpellSchool(evt, School.Value))
             {
                 return;
             }
-            evt.IgnoreSpellResistance = true;
+
+            SchoolSettingsData ssd = SettingHelper.GetSchoolSettings(School.Value);
+
+            if (ssd.School.HasFlag(AugmentedSchoolSetting.Penetration))
+            {
+                evt.IgnoreSpellResistance = true;
+            }
         }
 
         public void OnEventDidTrigger(RuleSpellResistanceCheck evt)
