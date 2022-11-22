@@ -14,7 +14,10 @@ namespace AugmentedMagics
     {
         public void OnEventAboutToTrigger(RuleSpellResistanceCheck evt)
         {
-            evt.AddSpellPenetration(2, Kingmaker.Enums.ModifierDescriptor.Feat);
+            if (Main.Settings.StrongerSpellPenetration)
+            {
+                evt.AddSpellPenetration(2, Kingmaker.Enums.ModifierDescriptor.Feat);
+            }
         }
 
         public void OnEventDidTrigger(RuleSpellResistanceCheck evt)

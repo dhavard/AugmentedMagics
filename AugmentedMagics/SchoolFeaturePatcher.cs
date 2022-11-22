@@ -9,6 +9,7 @@ using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.Designers.Mechanics.Recommendations;
 using Kingmaker.Designers.Mechanics.Facts;
+using AugmentedMagics.Settings;
 
 /**
  * Adopted from Scaling Cantrips by RealityMachina
@@ -77,29 +78,23 @@ namespace AugmentedMagics
                 Initialized = true;
                 AddFeatures();
                 AddParentPrereqs();
+                ImproveBaseFeats();
+            }
+
+            static void ImproveBaseFeats()
+            {
+                DoubleSpellPenetration(SPELL_PEN, SPELL_PEN_DESC);
+                DoubleSpellPenetration(SPELL_PEN_GREATER, SPELL_PEN_GR_DESC);
+                DoubleSpellPenetration(SPELL_PEN_MYTHIC, null);
+
+                DoubleSpellDifficultyCheck(SPELL_FOCUS, SPELL_FOCUS_DESC);
+                DoubleSpellDifficultyCheck(SPELL_FOCUS_GREATER, SPELL_FOCUS_GR_DESC);
             }
 
             static void AddParentPrereqs()
             {
-                /*
-                BlueprintFeature augsum = Resources.GetBlueprint<BlueprintFeature>(AUG_SUMMON);
-                if( augsum != null )
-                {
-                    foreach(BlueprintComponent bf in augsum.GetComponents<BlueprintComponent>())
-                    { 
-                        if(bf is PrerequisiteParametrizedFeature)
-                        {
-                            PrerequisiteParametrizedFeature ppf = (PrerequisiteParametrizedFeature)bf;
-                            if (ppf.IsParameterSpellSchool)
-                            {
-                                Main.Log("PPF is parameter spell " + ppf.SpellSchool);
-                            }
-                            BlueprintFeature reff = ppf.Feature;
-                            Main.Log("PPF feature name " + reff.Name + " guid " + reff.AssetGuid);
-                        }
-                    }
-                }
-                */
+                if (!Main.Settings.AugmentedMagicSchoolFeats)
+                    return;
 
                 AddParentPrerequisiteParameterized("AMAbjuration", SPELL_FOCUS_GREATER, SpellSchool.Abjuration);
                 AddParentPrerequisiteParameterized("AMConjuration", SPELL_FOCUS_GREATER, SpellSchool.Conjuration);
@@ -118,20 +113,13 @@ namespace AugmentedMagics
                 AddParentPrerequisite("AMIllusion", SPELL_PEN_GREATER);
                 AddParentPrerequisite("AMNecromancy", SPELL_PEN_GREATER);
                 AddParentPrerequisite("AMTransmutation", SPELL_PEN_GREATER);
-
-                DoubleSpellPenetration(SPELL_PEN, SPELL_PEN_DESC);
-                DoubleSpellPenetration(SPELL_PEN_GREATER, SPELL_PEN_GR_DESC);
-                DoubleSpellPenetration(SPELL_PEN_MYTHIC, null);
-
-                DoubleSpellDifficultyCheck(SPELL_FOCUS, SPELL_FOCUS_DESC);
-                DoubleSpellDifficultyCheck(SPELL_FOCUS_GREATER, SPELL_FOCUS_GR_DESC);
             }
 
             private static void DoubleSpellPenetration(string penfeat, string desc)
             {
                 BlueprintFeature bp = Resources.GetBlueprint<BlueprintFeature>(penfeat);
 
-                if (desc != null)
+                if (desc != null && Main.Settings.StrongerSpellPenetration)
                 {
                     bp.SetDescription(desc);
                 }
@@ -144,15 +132,19 @@ namespace AugmentedMagics
             {
                 BlueprintFeature bp = Resources.GetBlueprint<BlueprintFeature>(focusfeat);
 
-                if (desc != null)
+                if (desc != null && Main.Settings.StrongerSpellFocus)
                 {
                     bp.SetDescription(desc);
                 }
-                foreach(BlueprintComponent bc in bp.GetComponents<BlueprintComponent>())
+
+                if (Main.Settings.StrongerSpellFocus)
                 {
-                    if(bc is SpellFocusParametrized)
+                    foreach (BlueprintComponent bc in bp.GetComponents<BlueprintComponent>())
                     {
-                        ((SpellFocusParametrized)bc).BonusDC += 1;
+                        if (bc is SpellFocusParametrized)
+                        {
+                            ((SpellFocusParametrized)bc).BonusDC += 1;
+                        }
                     }
                 }
             }
@@ -179,14 +171,17 @@ namespace AugmentedMagics
 
             static void AddFeatures()
             {
-                AddWizardFeature("AMAbjuration", "Augmented Abjuration", "Abjurations you cast now last 24 hours and ignore spell resistance.", new AddAbjurationRule(), SpellSchool.Abjuration);
-                AddWizardFeature("AMConjuration", "Augmented Conjuration", "Conjuration spells now automatically have the Selective Metamagic and have a higher DC based on your Constitution bonus.", new AddConjurationRule(), SpellSchool.Conjuration);
-                AddWizardFeature("AMDivination", "Augmented Divination", "Divination spells you cast ignore spell resistance. Divination spells are not consumed when cast, but still must be prepared if required.", new AddDivinationRule(), SpellSchool.Divination);
-                AddWizardFeature("AMEnchantment", "Augmented Enchantment", "Your enchantments now have a higher DC based on your Charisma bonus and ignore spell resistance.", new AddEnchantmentRule(), SpellSchool.Enchantment);
-                AddWizardFeature("AMEvocation", "Augmented Evocation", "Evocation spells you cast now deal bonus damage equal to your caster stat bonus. For spells with multiple missles per cast, each subsequent missile recieves 1 less bonus damage than the previous missile.", new AddEvocationRule());
-                AddWizardFeature("AMIllusion", "Augmented Illusion", "Your illusions now have a higher DC based on your Intelligence bonus and ignore spell resistance.", new AddIllusionRule(), SpellSchool.Illusion);
-                AddWizardFeature("AMNecromancy", "Augmented Necromancy", "Your Necromancy spells now have a higher DC based on your Strength bonus and ignore spell resistance.", new AddNecromancyRule(), SpellSchool.Necromancy);
-                AddWizardFeature("AMTransmutation", "Augmented Transmutation", "Transmutation spells you cast ignore spell resistance. Transmutation spells now automatically have the Extend Metamagic and have a higher DC.", new AddTransmutationRule(), SpellSchool.Transmutation);
+                if (!Main.Settings.AugmentedMagicSchoolFeats)
+                    return;
+
+                AddWizardSchoolFeature("AMAbjuration", "Augmented Abjuration", SpellSchool.Abjuration);
+                AddWizardSchoolFeature("AMConjuration", "Augmented Conjuration", SpellSchool.Conjuration);
+                AddWizardSchoolFeature("AMDivination", "Augmented Divination", SpellSchool.Divination);
+                AddWizardSchoolFeature("AMEnchantment", "Augmented Enchantment", SpellSchool.Enchantment);
+                AddWizardSchoolFeature("AMEvocation", "Augmented Evocation", SpellSchool.Evocation);
+                AddWizardSchoolFeature("AMIllusion", "Augmented Illusion", SpellSchool.Illusion);
+                AddWizardSchoolFeature("AMNecromancy", "Augmented Necromancy", SpellSchool.Necromancy);
+                AddWizardSchoolFeature("AMTransmutation", "Augmented Transmutation", SpellSchool.Transmutation);
             }
 
             static void AddFeaturetoSelection(BlueprintFeature feat)
@@ -231,7 +226,7 @@ namespace AugmentedMagics
 
             }
 
-            static BlueprintFeature AddWizardFeature(string name, string title, string desc, BlueprintComponent component)
+            static BlueprintFeature AddWizardSchoolFeature(string name, string title, SpellSchool school)
             {
                 var blueprint = Helpers.CreateBlueprint<BlueprintFeature>(name, bp => {
                     bp.IsClassFeature = true;
@@ -239,37 +234,67 @@ namespace AugmentedMagics
                     FeatureGroup.WizardFeat, FeatureGroup.Feat};
                     bp.Ranks = 1;
                     bp.SetName(title);
-                    bp.SetDescription(desc);
+
+                    bp.SetDescription(BuildDescription(school));
                     bp.m_DescriptionShort = bp.m_Description;
-                    bp.AddComponent(component);
+
+                    bp.AddComponent(new AddAbilityParamRule().InitializeSchool(school));
+                    bp.AddComponent(new AddDamageRule().InitializeSchool(school));
+                    bp.AddComponent(new AddAugmentedPenetrationRule().InitializeSchool(school));
+                    bp.AddComponent(new AddBuffHandlerRule().InitializeSchool(school));
                     bp.AddComponent(Helpers.Create<RecommendationRequiresSpellbook>());
                     bp.AddComponent(Helpers.Create<FeatureTagsComponent>(c => {
                         c.FeatureTags = FeatureTag.Magic;
                     }));
                 });
-                AddToMythicFeatSelection(blueprint);
+
+                if (Main.Settings.AugmentationsAreMythic)
+                {
+                    AddToMythicFeatSelection(blueprint);
+                }
+                else
+                {
+                    AddFeaturetoSelection(blueprint);
+                }
                 return blueprint;
             }
 
-            static BlueprintFeature AddWizardFeature(string name, string title, string desc, BlueprintComponent component, SpellSchool school)
+            static string BuildDescription(SpellSchool school)
             {
-                var blueprint = Helpers.CreateBlueprint<BlueprintFeature>(name, bp => {
-                    bp.IsClassFeature = true;
-                    bp.Groups = new FeatureGroup[] {
-                    FeatureGroup.WizardFeat, FeatureGroup.Feat};
-                    bp.Ranks = 1;
-                    bp.SetName(title);
-                    bp.SetDescription(desc);
-                    bp.m_DescriptionShort = bp.m_Description;
-                    bp.AddComponent(component);
-                    bp.AddComponent(new AddAugmentedPenetrationRule().InitializeSchool(school));
-                    bp.AddComponent(Helpers.Create<RecommendationRequiresSpellbook>());
-                    bp.AddComponent(Helpers.Create<FeatureTagsComponent>(c => {
-                        c.FeatureTags = FeatureTag.Magic;
-                    }));
-                });
-                AddToMythicFeatSelection(blueprint);
-                return blueprint;
+                string desc = school + " spells now have the following bonuses:";
+
+                SchoolSettingsData ssd = SettingHelper.GetSchoolSettings(school);
+
+                if(ssd.School.HasFlag(AugmentedSchoolSetting.Damage))
+                {
+                    desc += "\n  - Deals bonus damage equal to your caster stat bonus.";
+                }
+                if (ssd.School.HasFlag(AugmentedSchoolSetting.DC))
+                {
+                    desc += "\n  - Has bonus DC equal to 1 + caster level divided by 2.";
+                }
+                if (ssd.School.HasFlag(AugmentedSchoolSetting.InifiniteCast))
+                {
+                    desc += "\n  - May be cast inifinitely, but may still require being prepared.";
+                }
+                if (ssd.School.HasFlag(AugmentedSchoolSetting.OneDayBuffs))
+                {
+                    desc += "\n  - Buffs last 24 hours.";
+                }
+                if (ssd.School.HasFlag(AugmentedSchoolSetting.Penetration))
+                {
+                    desc += "\n  - Ignores spell resistance.";
+                }
+
+                foreach (MetamagicSetting meta in SettingHelper.MetamagicSettingOptions)
+                {
+                    if (ssd.Metamagic.HasFlag(meta))
+                    {
+                        desc += "\n  - Automatically have Metamagic " + meta;
+                    }
+                }
+
+                return desc;
             }
         }
     }
